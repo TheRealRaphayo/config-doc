@@ -8,6 +8,8 @@
 >   `{{UTILISATEUR}}` `{{MOT_DE_PASSE}}` `{{QUANTITE}}`
 > - Variables calculées : `{{IP_CONTROLEUR}}`, `{{TABLEAU_UNITES : colonnes}}`.
 > - Bloc optionnel : l'encadrer par `<!-- SI: condition en clair -->` et `<!-- FIN SI -->`.
+> - Contenu à adapter au projet (ex. assignation des ports) : le faire précéder de
+>   `<!-- CONSIGNE : quoi adapter et comment -->`.
 > - Image : la déposer dans `assets/images/` sous le nom `fabricant-modele_sujet.png`
 >   et vérifier qu'elle ne montre ni mot de passe ni information de client.
 

@@ -11,7 +11,8 @@ references/index.md           table équipement → fichier de section
 references/_modele-section.md modèle à copier pour un nouvel équipement
 references/*.md               une section par équipement, programme ou procédure
 assets/images/                captures d'écran utilisées par les sections
-assets/gabarit.docx           mise en page Word (à ajouter)
+assets/gabarit.docx           mise en page Word (page titre, en-têtes, styles)
+scripts/assembler_docx.py     insère le contenu assemblé dans le gabarit
 exemples/                     exemple de liste d'équipements
 ```
 

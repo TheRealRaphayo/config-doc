@@ -1,14 +1,22 @@
 # Gabarit et images
 
-## gabarit.docx (à ajouter)
+## gabarit.docx
 
-Document Word qui fournit la mise en page : page titre, en-têtes et pieds de
-page, styles de titres et de tableaux, logo de votre entreprise.
+Mise en page Word : page titre, en-têtes, pieds de page, page de droits d'auteur
+et styles. Le script `scripts/assembler_docx.py` y remplace ces champs :
 
-- Garder dans le gabarit seulement la mise en forme. Le contenu par équipement
-  reste dans `references/`.
-- Ne pas y laisser le logo ou le nom d'un client.
-- Utiliser les styles Word standards (Titre 1, Titre 2, Normal, etc.).
+| Champ | Où | Source |
+|---|---|---|
+| `{{CLIENT}}` | page titre, en-têtes, propriétés | `--client` |
+| `{{SALLE}}` | page titre, en-tête de la page titre | `--salle` |
+| `{{TYPE_DE_SALLE}}` | en-tête des pages | `--type-salle` |
+| `{{REVISION}}` | bandeau de la page titre | `--revision` |
+| `{{DATE}}` | bandeau de la page titre | `--date` |
+| `{{CORPS}}` | après la page de droits d'auteur | fichier `corps.md` |
+
+Pour modifier la mise en page, ouvrir `gabarit.docx` dans Word et conserver ces
+champs tels quels. Le script utilise les styles Titre 1 à 3, Paragraphe de liste
+et Grille du tableau : ne pas les supprimer ni les renommer.
 
 ## images/
 

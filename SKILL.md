@@ -107,6 +107,8 @@ Règles d'assemblage :
 - **Blocs optionnels.** Un bloc entre `<!-- SI: condition -->` et `<!-- FIN SI -->`
   est gardé seulement si la condition est vraie pour ce projet. Dans le doute,
   demander à l'utilisateur.
+- **Consignes.** Un commentaire `<!-- CONSIGNE : ... -->` dit comment adapter le
+  tableau ou le paragraphe qui le suit au projet. L'appliquer, sans le recopier.
 - **Images.** Les sections référencent des captures dans `assets/images/`. Les
   insérer à l'endroit indiqué. Un commentaire `<!-- IMAGE À FOURNIR : ... -->`
   n'a pas d'image : ne rien insérer.
@@ -115,12 +117,36 @@ Règles d'assemblage :
 
 ### 5. Produire le fichier
 
-- Si `assets/gabarit.docx` existe, produire un document Word bâti sur ce gabarit
-  (styles, en-têtes, page titre). Lire d'abord le skill `docx` de l'environnement.
-- Sinon, produire un document Word avec une mise en page sobre, ou le format
-  demandé par l'utilisateur.
+Le gabarit `assets/gabarit.docx` fournit la page titre, les en-têtes, les pieds de
+page et les styles. Le script `scripts/assembler_docx.py` y insère le contenu :
 
-Nom du fichier : `<client>_<projet>_Configuration` (sans accents ni espaces).
+1. Écrire le contenu assemblé (étapes 2 à 4, à partir de « Information du
+   système ») dans un fichier `corps.md`, en Markdown simple : titres `#` à `###`,
+   paragraphes, `**gras**`, listes `- ` et `1. `, tableaux à barres verticales,
+   images `![texte](../assets/images/nom.png)`. Ne pas y mettre la page titre ni
+   la table des matières : le gabarit les contient.
+2. Lancer le script depuis le dossier du skill :
+
+   ```bash
+   python scripts/assembler_docx.py corps.md --client "<client>" --salle "<salle>" \
+       --type-salle "<type de salle>" --revision 1.0 --sortie <fichier>.docx
+   ```
+
+   `--type-salle` est le texte de l'en-tête après le nom du client. `--date`
+   (AAAA-MM-JJ) est optionnel ; par défaut, la date du jour.
+3. Le script refuse un corps qui contient encore des `{{VARIABLES}}` : les
+   remplacer par leur valeur ou par `[À COMPLÉTER : NOM]` (surligné en jaune dans
+   le document), puis relancer.
+4. Convertir le résultat en PDF et regarder quelques pages pour vérifier la mise
+   en page avant de le remettre (voir le skill `docx` de l'environnement).
+
+La table des matières se met à jour à l'ouverture dans Word, qui demande alors
+de confirmer la mise à jour des champs : le mentionner à l'utilisateur.
+
+Si l'utilisateur demande un autre format (PDF, Markdown), produire d'abord le
+Word, puis le convertir.
+
+Nom du fichier : `<client>_<salle>_Configuration` (sans accents ni espaces).
 
 ### 6. Signaler ce qui manque
 
