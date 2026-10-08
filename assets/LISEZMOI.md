@@ -8,11 +8,13 @@ et styles. Le script `scripts/assembler_docx.py` y remplace ces champs :
 | Champ | Où | Source |
 |---|---|---|
 | `{{CLIENT}}` | page titre, en-têtes, propriétés | `--client` |
-| `{{SALLE}}` | page titre, en-tête de la page titre | `--salle` |
-| `{{TYPE_DE_SALLE}}` | en-tête des pages | `--type-salle` |
+| `{{ROOM}}` | page titre, en-tête de la page titre | `--salle` |
+| `{{ROOM_TYPE}}` | en-tête des pages | `--type-salle` |
 | `{{REVISION}}` | bandeau de la page titre | `--revision` |
 | `{{DATE}}` | bandeau de la page titre | `--date` |
-| `{{CORPS}}` | après la page de droits d'auteur | fichier `corps.md` |
+| `{{BODY}}` | après la page de droits d'auteur | fichier `corps.md` |
+| `{{TOC_TITLE}}` | titre de la table des matières | `--lang` (« Contenus » ou « Contents ») |
+| `{{TOC_HINT}}` | texte provisoire de la table des matières | `--lang` |
 
 Pour modifier la mise en page, ouvrir `gabarit.docx` dans Word et conserver ces
 champs tels quels. Le script utilise les styles Titre 1 à 3, Paragraphe de liste

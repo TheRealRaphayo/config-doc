@@ -1,6 +1,8 @@
 # Index des sections
 
 Le skill cherche ici le fichier de section de chaque équipement de la liste.
+L'index est commun aux deux langues : chaque fichier existe sous le même nom
+dans `fr/` (français) et dans `en/` (anglais).
 L'ordre des lignes est l'ordre des sections dans le document.
 
 ## Équipements

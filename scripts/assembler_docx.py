@@ -19,7 +19,13 @@ NUM_PUCES = "25"          # liste à puces du gabarit
 LARGEUR_MAX = 5943600     # 6,5 po en EMU
 HAUTEUR_MAX = 5486400     # 6 po
 POLICE = '<w:rFonts w:ascii="Argumentum" w:hAnsi="Argumentum"/>'
-A_COMPLETER = re.compile(r"(\[À COMPLÉTER[^\]]*\])")
+TEXTES = {
+    "fr": {"toc_title": "Contenus", "missing": "[À COMPLÉTER : NAME]",
+           "toc_hint": "Mettre à jour la table des matières (clic droit, Mettre à jour les champs)."},
+    "en": {"toc_title": "Contents", "missing": "[TO COMPLETE: NAME]",
+           "toc_hint": "Update the table of contents (right-click, Update Field)."},
+}
+A_COMPLETER = re.compile(r"(\[(?:À COMPLÉTER|TO COMPLETE)[^\]]*\])")
 
 
 def runs(texte, gras=False, police=False):
@@ -125,7 +131,7 @@ class Corps:
         self.xml.append("".join(x))
 
     def image(self, alt, chemin):
-        for racine in (self.base, RACINE, os.path.join(RACINE, "references")):
+        for racine in (self.base, RACINE, os.path.join(RACINE, "references"), os.path.join(RACINE, "references", "fr")):
             p = os.path.normpath(os.path.join(racine, chemin))
             if os.path.isfile(p):
                 break
@@ -205,17 +211,20 @@ def convertir(md, base):
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("corps")
+    a.add_argument("--lang", choices=("fr", "en"), default="fr", help="langue du document (défaut : fr)")
     a.add_argument("--client", required=True)
-    a.add_argument("--salle", required=True)
-    a.add_argument("--type-salle", default="", help="texte de l'en-tête après le client (défaut : la salle)")
+    a.add_argument("--salle", "--room", dest="salle", required=True)
+    a.add_argument("--type-salle", "--room-type", dest="type_salle", default="",
+                   help="texte de l'en-tête après le client (défaut : la salle)")
     a.add_argument("--revision", default="1.0")
     a.add_argument("--date", default=datetime.date.today().isoformat(), help="AAAA-MM-JJ")
     a.add_argument("--gabarit", default=os.path.join(RACINE, "assets", "gabarit.docx"))
-    a.add_argument("--sortie", required=True)
+    a.add_argument("--sortie", "--output", dest="sortie", required=True)
     o = a.parse_args()
 
     d = datetime.date.fromisoformat(o.date)
-    champs = {"{{CLIENT}}": o.client, "{{SALLE}}": o.salle, "{{TYPE_DE_SALLE}}": o.type_salle or o.salle,
+    champs = {"{{CLIENT}}": o.client, "{{ROOM}}": o.salle, "{{ROOM_TYPE}}": o.type_salle or o.salle,
+              "{{TOC_TITLE}}": TEXTES[o.lang]["toc_title"], "{{TOC_HINT}}": TEXTES[o.lang]["toc_hint"],
               "{{REVISION}}": o.revision, "{{DATE}}": "%d/%d/%d" % (d.month, d.day, d.year)}
     with open(o.corps, encoding="utf-8") as f:
         c = convertir(f.read(), os.path.dirname(os.path.abspath(o.corps)))
@@ -223,7 +232,7 @@ def main():
     reste = sorted(set(re.findall(r"\{\{[^}]*\}\}", "".join(c.xml))))
     if reste:
         sys.exit("Variables non résolues dans le corps : " + ", ".join(reste) +
-                 "\nLes remplacer par une valeur ou par [À COMPLÉTER : NOM] avant d'assembler.")
+                 "\nLes remplacer par une valeur ou par %s avant d'assembler." % TEXTES[o.lang]["missing"])
 
     zin = zipfile.ZipFile(o.gabarit)
     zout = zipfile.ZipFile(o.sortie, "w", zipfile.ZIP_DEFLATED)
@@ -234,8 +243,12 @@ def main():
             for k, v in champs.items():
                 t = t.replace(k, escape(v))
             if info.filename == "word/document.xml":
-                t = re.sub(r"<w:p>(?:(?!</w:p>).)*\{\{CORPS\}\}.*?</w:p>", lambda m: "".join(c.xml), t, flags=re.S)
+                t = re.sub(r"<w:p>(?:(?!</w:p>).)*\{\{BODY\}\}.*?</w:p>", lambda m: "".join(c.xml), t, flags=re.S)
+                if o.lang == "en":
+                    t = t.replace('w:val="fr-CA"', 'w:val="en-CA"')
                 t = re.sub(r'w:fullDate="[^"]*"', 'w:fullDate="%sT00:00:00Z"' % o.date, t)
+            elif info.filename == "word/styles.xml" and o.lang == "en":
+                t = t.replace('w:val="fr-CA"', 'w:val="en-CA"')
             elif info.filename == "word/numbering.xml":
                 k = t.rindex("</w:num>") + len("</w:num>")  # les <w:num> doivent rester groupés
                 t = t[:k] + "".join(c.nums) + t[k:]

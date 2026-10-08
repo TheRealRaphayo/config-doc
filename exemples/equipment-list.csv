@@ -1,0 +1,13 @@
+manufacturer,model,description,ip_id,ip,subnet_mask,gateway,hostname,username,password,notes
+Netgear,M4250-8G2XF-PoE+,Switch,,192.168.100.254,255.255.255.0,192.168.100.1,,,,
+Crestron,RMC4,Controller,,192.168.100.2,255.255.255.0,192.168.100.1,UC-01,,,
+Crestron,UC-ENGINE,Interface,3,192.168.100.3,255.255.255.0,192.168.100.1,,,,
+Crestron,HD-CTL-101,Right display,5,192.168.100.5,255.255.255.0,192.168.100.1,,,,
+Crestron,HD-CTL-101,Side display,6,192.168.100.6,255.255.255.0,192.168.100.1,,,,
+Crestron,I12,Group camera,,192.168.100.21,255.255.255.0,192.168.100.1,,,,
+Crestron,I20,Presenter camera,,192.168.100.22,255.255.255.0,192.168.100.1,,,,
+QSC,Core 24f,Audio processor,,192.168.100.10,255.255.255.0,192.168.100.1,,,,
+Sennheiser,TCCM,Front microphone,,192.168.100.31,255.255.255.0,192.168.100.1,,,,
+Sennheiser,TCCM,Rear microphone,,192.168.100.32,255.255.255.0,192.168.100.1,,,,
+,Moniteur,Left display,,,,,,,,
+,Moniteur,Right display,,,,,,,,
